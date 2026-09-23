@@ -1,0 +1,68 @@
+======================================================================
+  DIO EXPLORER — RELATÓRIO DE TESTES UNITÁRIOS
+======================================================================
+  Data/Hora   : 23/09/2026 11:26:21
+  Duração     : 0.20s
+  Projeto     : projeto_final_dio_formacao_bob
+  Aluno teste : Luiz Antonio  |  Tecnologia foco: Java
+======================================================================
+
+----------------------------------------------------------------------
+  RESULTADOS POR COMANDO
+----------------------------------------------------------------------
+
+  🔍 /trilha  — Consulta de trilhas (Java)
+  Arquivo     : test_trilha.py
+  Executados  : 30  |  Aprovados: 30  |  Falhas: 0  |  Erros: 0  |  Pulados: 0
+  Taxa        : 100.0%  [PASSOU]
+
+  ⚔️  /desafio — Geração de desafios de código
+  Arquivo     : test_desafio.py
+  Executados  : 29  |  Aprovados: 29  |  Falhas: 0  |  Erros: 0  |  Pulados: 0
+  Taxa        : 100.0%  [PASSOU]
+
+  🎓 /certificado — Emissão de certificados
+  Arquivo     : test_certificado.py
+  Executados  : 31  |  Aprovados: 31  |  Falhas: 0  |  Erros: 0  |  Pulados: 0
+  Taxa        : 100.0%  [PASSOU]
+
+======================================================================
+  RESULTADO GLOBAL
+======================================================================
+  Total executados : 90
+  Aprovados        : 90
+  Falhas           : 0
+  Erros            : 0
+  Pulados          : 0
+  Taxa de aprovação: 100.0%
+  Meta (≥ 70%)     : ✅ META ATINGIDA
+======================================================================
+
+----------------------------------------------------------------------
+  FLUXO TESTADO — Java
+----------------------------------------------------------------------
+
+  1. /trilha Java
+     → Consulta a trilha 'Formação Java Developer' no catálogo.
+     → Verifica dados: 11 módulos, 17000 XP, nível Intermediário,
+       badges [Java Starter, Spring Boot Developer, Java Expert],
+       lives [Java OOP na Prática, APIs com Spring Boot, Microsserviços].
+     → Verifica busca case-insensitive (java / JAVA / jAvA).
+     → Verifica promoção inativa e vitalício ativado.
+
+  2. /desafio Java Intermediário
+     → Valida o nível Intermediário como aceito.
+     → Verifica intervalo de XP (1500–3000 XP).
+     → Verifica tempo estimado (30–60 minutos).
+     → Gera header do desafio e confirma campos obrigatórios.
+     → Confirma que XP gerado está dentro do intervalo esperado.
+
+  3. /certificado 'Luiz Antonio' Java
+     → Carga horária calculada: 11 × 10 = 110 horas.
+     → Código de validação gerado no formato DIO-202510-JAVA-XXXX.
+     → Certificado contém nome do aluno, trilha, data, XP e badges.
+     → Arquivo gravado em docs/certificados-emitidos/ com sucesso.
+
+======================================================================
+  Gerado por IBM Bob · DIO Explorer · Formação IBM Bob AI Developer
+======================================================================
