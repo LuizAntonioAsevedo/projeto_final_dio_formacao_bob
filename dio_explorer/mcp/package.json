@@ -1,0 +1,35 @@
+{
+  "name": "dio-explorer-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for DIO Explorer — exposes /trilha, /desafio and /certificado as MCP tools over stdio and HTTP",
+  "type": "module",
+  "main": "./build/index.js",
+  "bin": {
+    "dio-explorer-mcp": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start:stdio": "node build/index.js",
+    "start:http": "node build/index.js --http",
+    "dev": "tsc --watch"
+  },
+  "files": [
+    "build"
+  ],
+  "keywords": [
+    "mcp",
+    "dio",
+    "ibm-bob",
+    "education"
+  ],
+  "author": "Luiz Antonio Asevedo",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "typescript": "^5.9.3"
+  }
+}
