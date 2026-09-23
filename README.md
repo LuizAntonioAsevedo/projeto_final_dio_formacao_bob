@@ -7,15 +7,18 @@
 
 ## 📑 Índice
 
-- [Visão Geral](#visão-geral)
+- [O que é o DIO Explorer](#o-que-é-o-dio-explorer)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Arquitetura](#arquitetura)
-- [Funcionalidades](#funcionalidades)
+- [Como Executar o Projeto](#como-executar-o-projeto)
+- [Como Usar os Comandos](#como-usar-os-comandos)
   - [Slash Commands](#slash-commands)
   - [Skills](#skills)
   - [MCP Server](#mcp-server)
+- [Como Executar os Testes](#como-executar-os-testes)
 - [Catálogo de Trilhas](#catálogo-de-trilhas)
-- [Como Usar](#como-usar)
+- [Melhorias Realizadas](#melhorias-realizadas)
+- [O que Aprendi Durante o Desafio](#o-que-aprendi-durante-o-desafio)
 - [Prompts Usados Durante o Desenvolvimento](#prompts-usados-durante-o-desenvolvimento)
 - [Dicas e Insights para Futuros Desenvolvedores](#dicas-e-insights-para-futuros-desenvolvedores)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
@@ -23,9 +26,15 @@
 
 ---
 
-## Visão Geral
+## O que é o DIO Explorer
 
-O **DIO Explorer** demonstra na prática o poder do **IBM Bob** como plataforma de desenvolvimento de agentes de IA. O projeto combina três camadas de extensibilidade do Bob:
+O **DIO Explorer** é um agente interativo construído com **IBM Bob** para a plataforma [DIO (Digital Innovation One)](https://web.dio.me). Ele permite que qualquer pessoa:
+
+- 📚 **Explore trilhas de aprendizado** — consulte o plano de estudos completo de 30 tecnologias, com módulos, badges, lives e promoções ativas
+- 🏆 **Receba desafios de código** — desafios únicos, criativos e calibrados por nível (Básico, Intermediário, Avançado) com casos de teste e code review
+- 🎓 **Emita certificados fictícios** — certificados formatados em Markdown, salvos automaticamente em disco, com código de validação único
+
+O projeto demonstra na prática o poder do IBM Bob como plataforma de desenvolvimento de agentes de IA, combinando três camadas de extensibilidade:
 
 | Camada | Mecanismo | Onde fica |
 |---|---|---|
@@ -33,7 +42,7 @@ O **DIO Explorer** demonstra na prática o poder do **IBM Bob** como plataforma 
 | Comportamento enriquecido | Skills | `.bob/skills/` |
 | Integração externa | MCP Server (TypeScript) | `dio_explorer/mcp/` |
 
-Com essas três camadas, o agente consegue listar trilhas, gerar desafios de código sob medida e emitir certificados fictícios formatados — tudo sem sair do chat do Bob.
+Tudo isso acontece diretamente no chat do Bob, sem precisar sair do VS Code.
 
 ---
 
@@ -112,7 +121,39 @@ O Bob registra o MCP Server em [`.bob/mcp.json`](.bob/mcp.json) e o spawna autom
 
 ---
 
-## Funcionalidades
+## Como Executar o Projeto
+
+### Pré-requisitos
+
+- [IBM Bob](https://marketplace.visualstudio.com/items?itemName=IBM.ibm-developer) instalado no VS Code
+- Node.js 18+ instalado
+- Python 3.8+ instalado (apenas para rodar os testes unitários)
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/LuizAntonioAsevedo/projeto_final_dio_formacao_bob.git
+cd projeto_final_dio_formacao_bob
+```
+
+### 2. Instale e compile o MCP Server
+
+```bash
+cd dio_explorer/mcp
+npm install
+npm run build
+cd ../..
+```
+
+### 3. Abra no IBM Bob
+
+Abra a pasta do projeto no VS Code com o Bob ativo. O Bob detecta automaticamente o [`.bob/mcp.json`](.bob/mcp.json) e inicia o servidor `dio-explorer` como processo filho via stdio.
+
+> **Atenção:** O caminho no `mcp.json` aponta para o `build/index.js` com caminho absoluto. Ao clonar em outra máquina, atualize esse caminho para o seu ambiente.
+
+---
+
+## Como Usar os Comandos
 
 ### Slash Commands
 
@@ -359,50 +400,123 @@ O arquivo [`dio_explorer/data/trilhas_dio.json`](dio_explorer/data/trilhas_dio.j
 
 ---
 
-## Como Usar
+## Como Executar os Testes
 
-### Pré-requisitos
+O projeto possui uma suíte de **90 testes unitários** escritos em Python, cobrindo os três comandos principais. Os testes validam a lógica de busca no catálogo, geração de desafios e emissão de certificados de forma completamente isolada do Bob.
 
-- [IBM Bob](https://marketplace.visualstudio.com/items?itemName=IBM.ibm-developer) instalado no VS Code
-- Node.js 18+ instalado
+### Estrutura dos testes
 
-### 1. Clone o repositório
+```
+dio_explorer/tests/
+├── run_tests.py          # Runner principal — executa tudo e grava relatório
+├── test_trilha.py        # 30 testes — consulta de trilhas (case-insensitive, dados, promoção)
+├── test_desafio.py       # 29 testes — geração de desafios (XP, tempo, campos obrigatórios)
+└── test_certificado.py   # 31 testes — emissão de certificado (carga horária, código, arquivo)
+```
+
+### Como executar
+
+Execute a partir da raiz do projeto:
 
 ```bash
-git clone https://github.com/LuizAntonioAsevedo/projeto_final_dio_formacao_bob.git
-cd projeto_final_dio_formacao_bob
+python dio_explorer/tests/run_tests.py
 ```
 
-### 2. Compile o MCP Server
+O runner executa as três suítes, exibe o resultado no console e grava um relatório detalhado em:
 
-```bash
-cd dio_explorer/mcp
-npm install
-npm run build
-cd ../..
+```
+dio_explorer/docs/resultado_testes.txt
 ```
 
-### 3. Abra no IBM Bob
+### Resultado esperado
 
-Abra a pasta do projeto no VS Code com o Bob ativo. O Bob detecta automaticamente o `.bob/mcp.json` e inicia o servidor `dio-explorer` como processo filho.
+```
+======================================================================
+  DIO EXPLORER — RELATÓRIO DE TESTES UNITÁRIOS
+======================================================================
+  Total executados : 90
+  Aprovados        : 90
+  Falhas           : 0
+  Taxa de aprovação: 100.0%
+  Meta (≥ 70%)     : ✅ META ATINGIDA
+======================================================================
+```
 
-### 4. Use no chat
+### O que cada suíte testa
 
-**Via Slash Commands:**
-```
-/trilha Python
-/desafio Java Avançado
-/certificado "Seu Nome" Python
-```
+| Suíte | Testes | O que valida |
+|---|---|---|
+| `test_trilha.py` | 30 | Busca case-insensitive, dados do JSON (módulos, XP, badges, lives), promoção, vitalício |
+| `test_desafio.py` | 29 | Nível aceito, intervalo de XP, tempo estimado, campos obrigatórios no header |
+| `test_certificado.py` | 31 | Cálculo de carga horária (`módulos × 10`), formato do código de validação, salvamento do arquivo |
 
-**Via linguagem natural (MCP Tools):**
-```
-Liste todas as trilhas disponíveis
-Liste só as trilhas de nível Avançado
-Busque a trilha de React
-Gere um desafio de JavaScript no nível Intermediário
-Emita um certificado para "Maria Silva" na trilha de Machine Learning
-```
+---
+
+## Melhorias Realizadas
+
+Durante o desenvolvimento do projeto, diversas melhorias foram implementadas em relação à concepção inicial:
+
+### 1. MCP Server em TypeScript (upgrade principal)
+O projeto começou apenas com Slash Commands e Skills (arquivos Markdown). A principal melhoria foi a implementação de um **MCP Server real em TypeScript**, elevando o projeto de "configuração do Bob" para "extensão do Bob via protocolo padronizado". Isso traz validação de input, lógica de negócio real e reutilização por qualquer cliente MCP.
+
+### 2. Dual transport: stdio + HTTP
+O MCP Server foi construído com suporte a **dois modos de transporte**:
+- **stdio** — para uso direto pelo Bob (processo filho)
+- **HTTP com Streamable HTTP transport** — para uso como API remota, exposta via `--http`
+
+Isso vai além do requisito mínimo e permite integrar o servidor em pipelines externos, fazer testes com curl, ou colocar atrás de um proxy reverso HTTPS.
+
+### 3. Health check endpoint
+Adição de um endpoint `GET /health` no modo HTTP que retorna JSON com status, versão, número de sessões ativas e timestamp — útil para monitoramento, load balancers e probes de disponibilidade.
+
+### 4. Cache de dados em memória
+A função `getTrilhas()` usa uma variável `_cache` para evitar releituras do arquivo JSON a cada chamada de tool. Em uso intenso (múltiplas invocações em sequência), isso elimina I/O desnecessário.
+
+### 5. Suíte de 90 testes unitários em Python
+Foram criados 90 testes unitários em Python cobrindo os três comandos, com um runner que gera relatório detalhado em `resultado_testes.txt`. Isso garante que a lógica de negócio (cálculos, busca, geração de código) funciona corretamente de forma independente do Bob.
+
+### 6. Gestão de sessões HTTP isoladas
+No modo HTTP, cada cliente recebe um `sessionId` UUID único. O servidor mantém um mapa de sessões ativas e limpa automaticamente quando o cliente desconecta — prevenindo vazamento de recursos.
+
+### 7. Documentação completa e orientada ao desenvolvedor
+O README foi expandido com prompts reais usados no desenvolvimento, diagrama de arquitetura, 10 dicas práticas e seção de aprendizados — pensando em futuros desenvolvedores que usarão o projeto como referência.
+
+---
+
+## O que Aprendi Durante o Desafio
+
+### Sobre o IBM Bob e agentes de IA
+
+**O Bob é uma plataforma, não só uma ferramenta**
+Comecei o projeto enxergando o Bob como um assistente de código. Ao longo do desenvolvimento, percebi que ele é uma plataforma extensível: Slash Commands e Skills são formas de "programar" o comportamento do agente sem escrever código, e o MCP Server é a forma de integrar lógica real e persistente.
+
+**Prompt engineering é uma habilidade técnica**
+A qualidade da resposta do Bob depende diretamente da qualidade do prompt. Aprendi que um bom prompt precisa: definir o formato de saída com exemplos concretos, especificar o comportamento para casos de erro, e dar ao modelo informação suficiente sem ser ambíguo. A `description` de uma skill, por exemplo, precisa ser precisa o suficiente para disparar no contexto certo e genérica o suficiente para cobrir variações naturais da linguagem.
+
+**Skills vs Slash Commands: dois gatilhos, uma função**
+A distinção entre ativar um comportamento por comando explícito (`/trilha`) versus por intenção semântica (o Bob detectando que o usuário quer uma trilha) foi um dos aprendizados mais práticos. Manter os dois mecanismos em paralelo garante uma experiência mais fluida.
+
+### Sobre o Model Context Protocol (MCP)
+
+**MCP é o futuro da integração de agentes**
+Antes deste projeto, eu não conhecia o MCP. Aprendi que ele é um protocolo padronizado que permite qualquer agente (não só o Bob) chamar ferramentas externas de forma segura, com schemas validados e múltiplos transportes. É como uma "API para agentes de IA".
+
+**stdio é mais simples do que parece**
+O transporte stdio — onde o agente spawna o servidor como processo filho e se comunica via stdin/stdout — é elegante e funciona sem configuração de rede. Implementar os dois transportes (stdio e HTTP) no mesmo servidor foi um exercício valioso de arquitetura.
+
+**Zod torna os schemas de tools muito mais seguros**
+Usar Zod para validar os inputs das tools MCP garantiu que erros de tipo fossem capturados antes de chegar à lógica de negócio. O erro retornado pelo schema é descritivo e já indica ao cliente o que corrigir.
+
+### Sobre desenvolvimento de software
+
+**Separar dados, lógica e apresentação funciona em qualquer paradigma**
+Mesmo num projeto "sem código" (do ponto de vista tradicional), a separação entre JSON (dados), Skills/Commands (apresentação) e MCP Server (lógica) tornou tudo mais fácil de manter e testar.
+
+**Testes unitários têm valor mesmo em projetos de IA**
+Embora a resposta final do agente seja gerada por um modelo de linguagem (não testável unitariamente), a lógica de negócio — cálculo de carga horária, geração de código de validação, busca case-insensitive — é determinística e perfeitamente testável. Criar os 90 testes Python revelou edge cases que precisaram de correção.
+
+**A documentação é parte do produto**
+Um projeto bem documentado tem mais valor do que um projeto funcional sem documentação. Escrever os prompts, as dicas e os aprendizados transformou este repositório em um recurso de referência, não só em um projeto de portfólio.
 
 ---
 
